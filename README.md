@@ -1,4 +1,4 @@
-# 📚 EnhancerBookManagement
+# 📚 Enhanzer Book Management
 
 A modern, full-stack web application for managing your digital book library with a beautiful user interface and robust backend API.
 
