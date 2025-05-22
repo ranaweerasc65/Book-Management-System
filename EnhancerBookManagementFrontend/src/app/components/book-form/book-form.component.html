@@ -1,0 +1,190 @@
+<div class="fade-in">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2 class="text-white mb-0">
+        <i class="fas fa-book-plus me-2"></i>
+        {{isEditMode ? 'Edit Book' : 'Add New Book'}}
+      </h2>
+      <p class="text-white-50">{{isEditMode ? 'Update book information' : 'Add a new book to your library'}}</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-outline-light" routerLink="/books">
+        <i class="fas fa-arrow-left me-2"></i>
+        Back to Library
+      </button>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="custom-card">
+    <div class="card-body p-4">
+      <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <!-- Title Field -->
+          <div class="col-md-6 mb-3">
+            <label for="title" class="form-label fw-semibold">
+              <i class="fas fa-book me-2 text-primary"></i>
+              Book Title *
+            </label>
+            <input
+              type="text"
+              id="title"
+              class="form-control"
+              formControlName="title"
+              placeholder="Enter book title"
+              [class.is-invalid]="isFieldInvalid('title')"
+              [class.is-valid]="isFieldValid('title')">
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('title')">
+              <small *ngIf="bookForm.get('title')?.errors?.['required']">
+                Title is required
+              </small>
+              <small *ngIf="bookForm.get('title')?.errors?.['maxlength']">
+                Title cannot exceed 200 characters
+              </small>
+            </div>
+          </div>
+
+          <!-- Author Field -->
+          <div class="col-md-6 mb-3">
+            <label for="author" class="form-label fw-semibold">
+              <i class="fas fa-user me-2 text-success"></i>
+              Author *
+            </label>
+            <input
+              type="text"
+              id="author"
+              class="form-control"
+              formControlName="author"
+              placeholder="Enter author name"
+              [class.is-invalid]="isFieldInvalid('author')"
+              [class.is-valid]="isFieldValid('author')">
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('author')">
+              <small *ngIf="bookForm.get('author')?.errors?.['required']">
+                Author is required
+              </small>
+              <small *ngIf="bookForm.get('author')?.errors?.['maxlength']">
+                Author name cannot exceed 100 characters
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- ISBN Field -->
+          <div class="col-md-6 mb-3">
+            <label for="isbn" class="form-label fw-semibold">
+              <i class="fas fa-barcode me-2 text-info"></i>
+              ISBN *
+            </label>
+            <input
+              type="text"
+              id="isbn"
+              class="form-control"
+              formControlName="isbn"
+              placeholder="Enter ISBN (e.g., 978-0-123456-78-9)"
+              [class.is-invalid]="isFieldInvalid('isbn')"
+              [class.is-valid]="isFieldValid('isbn')">
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('isbn')">
+              <small *ngIf="bookForm.get('isbn')?.errors?.['required']">
+                ISBN is required
+              </small>
+              <small *ngIf="bookForm.get('isbn')?.errors?.['maxlength']">
+                ISBN cannot exceed 20 characters
+              </small>
+            </div>
+          </div>
+
+          <!-- Publication Date Field -->
+          <div class="col-md-6 mb-3">
+            <label for="publicationDate" class="form-label fw-semibold">
+              <i class="fas fa-calendar me-2 text-warning"></i>
+              Publication Date *
+            </label>
+            <input
+              type="date"
+              id="publicationDate"
+              class="form-control"
+              formControlName="publicationDate"
+              [class.is-invalid]="isFieldInvalid('publicationDate')"
+              [class.is-valid]="isFieldValid('publicationDate')">
+            <div class="invalid-feedback" *ngIf="isFieldInvalid('publicationDate')">
+              <small *ngIf="bookForm.get('publicationDate')?.errors?.['required']">
+                Publication date is required
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Alert -->
+        <div *ngIf="error" class="alert alert-danger alert-custom mb-3">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          {{error}}
+        </div>
+
+        <!-- Success Alert -->
+        <div *ngIf="successMessage" class="alert alert-success alert-custom mb-3">
+          <i class="fas fa-check-circle me-2"></i>
+          {{successMessage}}
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+          <button 
+            type="button" 
+            class="btn btn-outline-secondary btn-lg"
+            routerLink="/books"
+            [disabled]="submitting">
+            <i class="fas fa-times me-2"></i>
+            Cancel
+          </button>
+
+          <button 
+            type="submit" 
+            class="btn btn-gradient-primary btn-lg"
+            [disabled]="bookForm.invalid || submitting">
+            <span *ngIf="submitting" class="loading-spinner me-2"></span>
+            <i *ngIf="!submitting" class="fas fa-save me-2"></i>
+            {{submitting ? 'Saving...' : (isEditMode ? 'Update Book' : 'Add Book')}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Form Guide -->
+  <div class="custom-card mt-4">
+    <div class="card-body">
+      <h6 class="card-title">
+        <i class="fas fa-info-circle me-2 text-info"></i>
+        Form Guidelines
+      </h6>
+      <div class="row">
+        <div class="col-md-6">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i>
+              All fields marked with (*) are required
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i>
+              Title: Maximum 200 characters
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-6">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i>
+              Author: Maximum 100 characters
+            </li>
+            <li class="mb-2">
+              <i class="fas fa-check text-success me-2"></i>
+              ISBN: Maximum 20 characters
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

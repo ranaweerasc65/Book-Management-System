@@ -1,0 +1,165 @@
+<div class="fade-in" *ngIf="!loading">
+  <!-- Page Header -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2 class="text-white mb-0">
+        <i class="fas fa-book-open me-2"></i>
+        Book Details
+      </h2>
+      <p class="text-white-50">View complete book information</p>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-outline-light" routerLink="/books">
+        <i class="fas fa-arrow-left me-2"></i>
+        Back to Library
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="loading-spinner me-2"></div>
+    <span class="text-white">Loading book details...</span>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="alert alert-danger alert-custom">
+    <i class="fas fa-exclamation-triangle me-2"></i>
+    {{error}}
+    <button class="btn btn-outline-danger btn-sm ms-3" (click)="loadBook()">
+      <i class="fas fa-redo me-1"></i>
+      Retry
+    </button>
+  </div>
+
+  <!-- Book Details -->
+  <div *ngIf="book && !loading && !error">
+    <div class="custom-card">
+      <div class="card-body p-5">
+        <div class="row">
+          <!-- Book Information -->
+          <div class="col-lg-8">
+            <div class="mb-4">
+              <h1 class="display-5 fw-bold text-primary mb-2">{{book.title}}</h1>
+              <h4 class="text-muted mb-3">by {{book.author}}</h4>
+              
+              <div class="row g-3">
+                <div class="col-sm-6">
+                  <div class="info-item">
+                    <i class="fas fa-barcode text-info me-2"></i>
+                    <strong>ISBN:</strong>
+                    <code class="ms-2 bg-light px-2 py-1 rounded">{{book.isbn}}</code>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="info-item">
+                    <i class="fas fa-calendar text-warning me-2"></i>
+                    <strong>Published:</strong>
+                    <span class="ms-2">{{book.publicationDate | date:'fullDate'}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div class="row g-3 mt-3">
+              <div class="col-sm-6">
+                <div class="stat-card p-3 bg-light rounded">
+                  <i class="fas fa-clock text-secondary me-2"></i>
+                  <strong>Years Since Publication:</strong>
+                  <div class="fs-4 fw-bold text-primary">{{getYearsSincePublication()}}</div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="stat-card p-3 bg-light rounded">
+                  <i class="fas fa-tag text-secondary me-2"></i>
+                  <strong>Book ID:</strong>
+                  <div class="fs-4 fw-bold text-success">#{{book.id}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions Panel -->
+          <div class="col-lg-4">
+            <div class="actions-panel p-4 bg-light rounded h-100">
+              <h5 class="mb-4">
+                <i class="fas fa-cogs me-2"></i>
+                Quick Actions
+              </h5>
+              
+              <div class="d-grid gap-3">
+                <button 
+                  class="btn btn-gradient-success btn-lg"
+                  [routerLink]="['/books/edit', book.id]">
+                  <i class="fas fa-edit me-2"></i>
+                  Edit Book
+                </button>
+                
+                <button 
+                  class="btn btn-gradient-danger btn-lg"
+                  (click)="confirmDelete()">
+                  <i class="fas fa-trash me-2"></i>
+                  Delete Book
+                </button>
+                
+                <hr class="my-3">
+                
+                <button 
+                  class="btn btn-outline-primary btn-lg"
+                  routerLink="/books">
+                  <i class="fas fa-list me-2"></i>
+                  View All Books
+                </button>
+                
+                <button 
+                  class="btn btn-outline-secondary btn-lg"
+                  routerLink="/books/add">
+                  <i class="fas fa-plus me-2"></i>
+                  Add New Book
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Book Statistics -->
+    <div class="custom-card mt-4">
+      <div class="card-body">
+        <h5 class="card-title mb-4">
+          <i class="fas fa-chart-bar me-2 text-info"></i>
+          Book Statistics
+        </h5>
+        <div class="row text-center">
+          <div class="col-md-3">
+            <div class="stat-item">
+              <i class="fas fa-font fa-2x text-primary mb-2"></i>
+              <h6>Title Length</h6>
+              <span class="badge bg-primary fs-6">{{book.title.length}} characters</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <i class="fas fa-user fa-2x text-success mb-2"></i>
+              <h6>Author Length</h6>
+              <span class="badge bg-success fs-6">{{book.author.length}} characters</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <i class="fas fa-barcode fa-2x text-info mb-2"></i>
+              <h6>ISBN Length</h6>
+              <span class="badge bg-info fs-6">{{book.isbn.length}} characters</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <i class="fas fa-birthday-cake fa-2x text-warning mb-2"></i>
+              <h6>Publication Era</h6>
+              <span class="badge bg-warning fs-6">{{getPublicationEra()}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
